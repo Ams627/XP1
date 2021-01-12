@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace XP1
 {
@@ -19,6 +20,18 @@ namespace XP1
                 var doc = XDocument.Parse("<Root><a><b>Fred</b></a></Root>");
                 var v = doc.XPathSelectElement("//Root/a/b").Value;
                 Console.WriteLine(v);
+
+
+                var doc2 = XDocument.Parse("<Root xmlns=\"blah\"><a><b>Fred</b></a></Root>");
+
+                XmlNamespaceManager namespaces = new XmlNamespaceManager(new NameTable());
+                XNamespace ns = doc2.Root.GetDefaultNamespace();
+                namespaces.AddNamespace("ns", ns.NamespaceName);
+
+                var v2 = doc2.XPathSelectElement("//ns:Root/ns:a/ns:b", namespaces)?.Value;
+
+
+                Console.WriteLine(v2);
             }
             catch (Exception ex)
             {
